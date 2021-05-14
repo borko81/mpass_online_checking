@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Employee in the house{% endblock title %}
+{% block css %}
+<link rel="stylesheet" href="static/main.css">
+{% endblock css %}
+{% block body %}
+<table class="table table-striped" id="myTable">
+  <thead class="thead-dark">
+    <th><input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.."></th>
+    <th>Дата/Час</th>
+    <th>Статус</th>
+  </thead>
+  {% for result in data %}
+  <tr>
+    <td>{{ result[1] }}</td>
+    <td>{{ result[2].strftime('%d.%m.%Y %H:%M:%S') }}</td>
+    <td>{{ result[3] }}</td>
+  </tr>
+  {% endfor %}
+</table>
+<script>
+  function myFunction() {
+    // Declare variables
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[0];
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+</script>
+{% endblock body %}

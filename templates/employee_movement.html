@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}Employee in the house{% endblock title %}
+{% block css %}
+<link rel="stylesheet" href="static/main.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{% endblock css %}
+{% block body %}
+{% if data %}
+<table class="table" id="myTable">
+    <thead class='thead-dark'>
+        <th><input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.."></th>
+        <th>Дата</th>
+        <th>Деиствие</th>
+    </thead>
+    {% for line in data %}
+    <tr>
+        <td>{{ line[0] }}</td>
+        <td>{{ line[1].strftime('%d.%m.%Y %H:%M:%S') }}</td>
+        <td>{{ line[2] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% else %}
+<form method='POST' action='/data_movements'>
+    <div class="mb-3">
+        <label for="f_date" class="form-label">Първа дата</label>
+        <input type="date" class="form-control" id="f_date" name="f_date">
+    </div>
+    <div class="mb-3">
+        <label for="l_date" class="form-label">Втора дата</label>
+        <input type="date" class="form-control" id="l_date" name="l_date">
+    </div>
+    <button type="submit" class="btn btn-primary form-control">Зареди</button>
+</form>
+{% endif %}
+
+<script>
+    function myFunction() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+
+{% endblock body %}
