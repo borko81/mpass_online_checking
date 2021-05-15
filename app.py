@@ -64,5 +64,62 @@ def movements():
     return render_template('employee_movement.html')
 
 
+def calculate_time(info_time_list):
+    total_time = info_time_list.pop()
+    seconds = 0
+    while info_time_list:
+        temp = (total_time - info_time_list.pop()).seconds
+        seconds += temp
+        try:
+            total_time = info_time_list.pop()
+        except IndexError:
+            pass
+    return str(timedelta(seconds=seconds))
+
+
+@app.route('/show_total_time', methods=['POST', 'GET'])
+def total_time():
+    return render_template('time_id_the_house.html')
+
+
+@app.route('/data_time_in_house' , methods=['POST', 'GET'])
+def data_time_in_house():
+    if request.method == 'POST':
+        f_data = request.form["f_date"] or str(datetime.today().date())
+        l_data = request.form["l_date"] or str(datetime.today().date())
+        query = """
+        select
+        employees.name,
+        pass.datetime,
+        pass.passtype
+        from pass
+        inner join employees on employees.id = pass.emp_id
+        where cast(pass.datetime as date) between ? and ?
+        order by 1, 2
+        """
+        result = {}
+        data = con_to_firebird(query, (f_data, l_data))
+        for line in data:
+            name = line[0]
+            time_check = line[1]
+            passtype = line[2]
+            if name not in result:
+                result[name] = {'in': 0, 'out': 0, 'total_time': []}
+            if passtype == '1':
+                result[name]['in'] += 1
+            else:
+                result[name]['out'] += 1
+            result[name]['total_time'].append(time_check)
+
+        for _, value in result.items():
+            if value['out'] == value['in']:
+                value['total_time'] = calculate_time(value['total_time'])
+            else:
+                value['total_time'] = 'Няма съвпадащи данни'
+        return render_template('time_id_the_house.html', data=result)
+    message = {'greeting': 'Must enter through form'}
+    return message  # serialize and use JSON headers
+
+
 if __name__ == '__main__':
     app.run(debug=True)
