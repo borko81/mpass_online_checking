@@ -3,17 +3,21 @@ from datetime import timedelta, datetime
 import json
 from flask import Flask, request, jsonify, make_response
 from flask.templating import render_template
-from flask_cors import CORS
+# from flask_cors import CORS
 from flask.wrappers import Response
 
 from firebird.connection import con_to_firebird
 
 app = Flask(__name__)
-CORS(app)
+# CORS(app)
 
 
 @app.route('/')
 def index():
+    """
+    Begin page, show employees in a house
+    return: name, datetime in, status
+    """
     query = """
     select
     pass.emp_id as p_id,
@@ -37,7 +41,12 @@ def index():
 
 @app.route('/data_movements', methods=['POST', 'GET'])
 def data_movements():
+    """
+    Movements employee by first and last datetime.
+    return: name, datetime in, status
+    """
     if request.method == 'POST':
+        # If form send empty date cast for to date today.
         f_data = request.form["f_date"] or str(datetime.today().date())
         l_data = request.form["l_date"] or str(datetime.today().date())
         query = """
@@ -79,12 +88,20 @@ def calculate_time(info_time_list):
 
 @app.route('/show_total_time', methods=['POST', 'GET'])
 def total_time():
+    """
+    Employe total time in a house
+    """
     return render_template('time_id_the_house.html')
 
 
 @app.route('/data_time_in_house' , methods=['POST', 'GET'])
 def data_time_in_house():
+    """
+    show return result from total_time
+    return: name, total_time in a house, count in and count out, Няма съвпадащи данни if employe has in but not out in custom date period.
+    """
     if request.method == 'POST':
+        # If form send empty date cast for to date today.
         f_data = request.form["f_date"] or str(datetime.today().date())
         l_data = request.form["l_date"] or str(datetime.today().date())
         query = """
@@ -99,6 +116,7 @@ def data_time_in_house():
         """
         result = {}
         data = con_to_firebird(query, (f_data, l_data))
+        # cikle to calculate needed staff
         for line in data:
             name = line[0]
             time_check = line[1]
@@ -122,4 +140,5 @@ def data_time_in_house():
 
 
 if __name__ == '__main__':
+    # Debug is active!!!!!!!!!!!!!!!!!!!
     app.run(debug=True)
