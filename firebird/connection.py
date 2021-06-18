@@ -2,7 +2,7 @@ import fdb
 
 database = {
     "host": "127.0.0.1",
-    "database": "alias",
+    "database": "mpass",
     "user": "SYSDBA",
     "password": "masterkey",
 }

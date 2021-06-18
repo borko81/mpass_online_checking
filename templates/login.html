@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Login</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+	<div class="container">
+	<div id="login-div">
+		<form action="/login" method="POST">
+			<div class="form-holder">
+				<input type="text" name="username" class="form-control" placeholder="Username">
+				<input type="password" name="password" class="form-control" placeholder="Password">
+			</div>
+				<button class="submit-btn btn btn-success form-control">LOG IN</button>
+		</form>
+		{% with messages = get_flashed_messages() %}
+  		{% if messages %}
+    		<ul class="myalert-danger">
+				{% for message in messages %}
+					<li>{{ message|safe }}</li>
+				{% endfor %}
+    		</ul>
+  		{% endif %}
+	{% endwith %}
+	</div>
+</div>
+</body>
+</html>
