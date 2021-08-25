@@ -3,6 +3,14 @@
 {% block css %}
 <link rel="stylesheet" href="static/main.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<style>
+    .income {
+        background-color: lightgreen;
+    }
+    .outcome {
+        background-color: lightcoral;
+    }
+</style>
 {% endblock css %}
 {% block body %}
 {% if data %}
@@ -13,11 +21,19 @@
         <th>Деиствие</th>
     </thead>
     {% for line in data %}
-    <tr>
+    {% if 'Влиза' in line[2] %}
+    <tr class="income">
         <td>{{ line[0] }}</td>
         <td>{{ line[1].strftime('%d.%m.%Y %H:%M:%S') }}</td>
-        <td>{{ line[2] }}</td>
+            <td>{{ line[2] }}</td>
     </tr>
+    {% else %}
+    <tr class="outcome">
+        <td>{{ line[0] }}</td>
+        <td>{{ line[1].strftime('%d.%m.%Y %H:%M:%S') }}</td>
+            <td>{{ line[2] }}</td>
+    </tr>
+    {% endif %}
     {% endfor %}
 </table>
 
