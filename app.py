@@ -7,6 +7,8 @@ from flask.templating import render_template
 from flask.wrappers import Response
 
 from firebird.connection import con_to_firebird
+import hashlib
+
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "Therion"
@@ -26,8 +28,11 @@ def index():
 
 @app.route("/login", methods=["POST"])
 def login():
-    """ Login page """
-    if request.form["password"] == "buratino" and request.form["username"] == "buratino":
+    user_credential = hashlib.sha256()
+    password_credential = hashlib.sha256()
+    user_credential.update(request.form["username"].encode('utf-8'))
+    password_credential.update(request.form["password"].encode('utf-8'))
+    if user_credential.hexdigest() == "694f9239193cd42447a703b48e6759b6c9917587064798bb14ad020a3b3b8539" and password_credential.hexdigest() == "694f9239193cd42447a703b48e6759b6c9917587064798bb14ad020a3b3b8539":
         session.permanent = False
         session["logged_in"] = True
         return redirect(url_for("all_in_a_house"))
