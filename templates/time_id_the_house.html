@@ -6,19 +6,22 @@
 {% block body %}
 
 {% if data %}
+Справка за период: от {{ f_data }} до {{ l_data}}
 <table class="table table-striped" id="myTable">
     <thead class='thead-dark'>
         <th><input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.."></th>
         <th>Време в обекта</th>
         <th>Влизания</th>
         <th>Излизания</th>
+        <th>Детаили</th>
     </thead>
     {% for key, value in data.items() %}
     <tr>
-        <td>{{ key }}</td>
+        <td><b>{{ key }}</b></td>
         <td>{{ value['total_time'] }}</td>
         <td>{{ value['in'] }}</td>
         <td>{{ value['out'] }}</td>
+        <td><a class="btn btn-success" href="{{ url_for('details_for_entries', f_data=f_data, l_data=l_data, key=key) }} ">Детаили</a></td>
     </tr>
     {% endfor %}
 </table>

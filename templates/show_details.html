@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Show details{% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" href="static/main.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<style>
+    .income {
+        background-color: lightgreen;
+    }
+    .outcome {
+        background-color: bisque;
+    }
+</style>
+{% endblock css %}
+
+{% block body %}
+
+Справка служител {{ key }} за период: от {{ f_data }} до {{ l_data}}
+<table class="table" id="myTable">
+    <thead class='thead-dark'>
+        <th><input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.."></th>
+        <th>Дата</th>
+        <th>Деиствие</th>
+    </thead>
+    {% for line in data %}
+    {% if '1' == line[2] %}
+    <tr class="income">
+        <td>{{ line[0] }}</td>
+        <td>{{ line[1].strftime('%d.%m.%Y %H:%M:%S') }}</td>
+            <td>Вход</td>
+    </tr>
+    {% else %}
+    <tr class="outcome">
+        <td>{{ line[0] }}</td>
+        <td>{{ line[1].strftime('%d.%m.%Y %H:%M:%S') }}</td>
+            <td>Изход</td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+</table>
+
+{% endblock body %}

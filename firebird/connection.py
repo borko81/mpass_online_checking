@@ -2,7 +2,7 @@ import fdb
 
 database = {
     "host": "127.0.0.1",
-    "database": r"C:\Users\Borko\Desktop\spas\MSPAS.FDB",
+    "database": "mpass ",
     "user": "SYSDBA",
     "password": "masterkey",
 }
