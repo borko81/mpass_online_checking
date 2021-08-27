@@ -142,7 +142,7 @@ def total_time():
         return index()
 
 
-@app.route('/data_time_in_house' , methods=['POST', 'GET'])
+@app.route('/data_time_in_house', methods=['POST', 'GET'])
 def data_time_in_house():
     """
     show return result from total_time
@@ -183,9 +183,32 @@ def data_time_in_house():
                     value['total_time'] = calculate_time(value['total_time'])
                 else:
                     value['total_time'] = 'Няма съвпадащи данни'
-            return render_template('time_id_the_house.html', data=result)
+            return render_template('time_id_the_house.html', data=result, f_data=f_data, l_data=l_data)
         message = {'greeting': 'Must enter through form'}
         return message  # serialize and use JSON headers
+    else:
+        flash("wrong autentication")
+        return index()
+
+
+@app.route('/details_for_entries/<string:f_data>/<string:l_data>/<string:key>', methods=['GET'])
+def details_for_entries(f_data, l_data, key):
+    if session.get("logged_in") is True:
+        # If form send empty date cast for to date today.
+        query = """
+        select
+        employees.name,
+        pass.datetime,
+        pass.passtype,
+        employees.id
+        from pass
+        inner join employees on employees.id = pass.emp_id
+        where cast(pass.datetime as date) between ? and ?
+        and employees.id = (select employees.id from employees where employees.name = ?)
+        order by 1, 2
+        """
+        data = con_to_firebird(query, (f_data, l_data, key))
+        return render_template('show_details.html', data=data, f_data=f_data, l_data=l_data, key=key)
     else:
         flash("wrong autentication")
         return index()

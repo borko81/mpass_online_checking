@@ -8,7 +8,7 @@
         background-color: lightgreen;
     }
     .outcome {
-        background-color: lightcoral;
+        background-color: bisque;
     }
 </style>
 {% endblock css %}
@@ -23,13 +23,13 @@
     {% for line in data %}
     {% if 'Влиза' in line[2] %}
     <tr class="income">
-        <td>{{ line[0] }}</td>
+        <td><b>{{ line[0] }}</b></td>
         <td>{{ line[1].strftime('%d.%m.%Y %H:%M:%S') }}</td>
             <td>{{ line[2] }}</td>
     </tr>
     {% else %}
     <tr class="outcome">
-        <td>{{ line[0] }}</td>
+        <td><b>{{ line[0] }}</b></td>
         <td>{{ line[1].strftime('%d.%m.%Y %H:%M:%S') }}</td>
             <td>{{ line[2] }}</td>
     </tr>
