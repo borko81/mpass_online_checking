@@ -121,13 +121,14 @@ def calculate_time(info_time_list):
     total_time = info_time_list.pop()
     seconds = 0
     while info_time_list:
-        temp = (total_time - info_time_list.pop()).seconds
+        temp = ((total_time - info_time_list.pop()).seconds)
         seconds += temp
         try:
             total_time = info_time_list.pop()
         except IndexError:
             pass
-    return str(timedelta(seconds=seconds))
+    # Не закръглява на 5-а!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    return f"{seconds // 3600}:{str( (round(((seconds % 3600) / 60))) ).zfill(2)}"
 
 
 @app.route('/show_total_time', methods=['POST', 'GET'])
